@@ -141,11 +141,17 @@ class GenHandler(BaseHandler):
             username = query.username
             rsa3dir = os.path.join(self.settings["static_path"], "easyrsa3")
             cmd = os.path.join(rsa3dir, "genconf.sh {0}".format(username))
-            subprocess.call(cmd, shell=True)
-            url = "/static/easyrsa3/{0}.ovpn".format(username)
-            result["message"] = "success"
-            result["data"]["url"] = url
-            self.write(json.dumps(result))
+            status = subprocess.call(cmd, shell=True)
+            if status == 0:
+                url = "/static/easyrsa3/{0}.ovpn".format(username)
+                result["status"] = 0
+                result["message"] = "success"
+                result["data"]["url"] = url
+                self.write(json.dumps(result))
+            else:
+                result['status'] = status
+                result['message'] = "生成配置失败"
+                self.write(json.dumps(result)
         else:
             err_msg = {"result": "%s 不存在" % query.username}
             self.send_error(status_code=500, **err_msg)
