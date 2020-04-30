@@ -59,6 +59,7 @@
                 <div class="layui-col-md8">
                     <i class="layui-icon layui-icon-more-vertical" style="color: #ddd; margin: 10px 10px 0 0"></i>
                     <button id="btn_add" class="layui-btn layui-btn-normal layui-btn-sm">添加</button>
+                    <button id="btn_gen" class="layui-btn layui-btn-disabled layui-btn-sm">生成配置</button>
                     <button id="btn_passwd" class="layui-btn layui-btn-disabled layui-btn-sm">修改密码</button>
                     <button id="btn_active" class="layui-btn layui-btn-disabled layui-btn-sm">激活</button>
                     <button id="btn_expire" class="layui-btn layui-btn-disabled layui-btn-sm">延期</button>
@@ -144,7 +145,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
         {checkbox: true},
         {field: 'id', title: 'ID', hide: true},
         {field: 'username', title: '用户', width: 150},
-        {field: 'password', title: '密码'},
+        //{field: 'password', title: '密码'},
         {field: 'active', title: '状态', templet: function(d){return d.active == true ? "激活":"禁用"}, width: 60},
         {field: 'expire', title: '过期日期', width: 110},
         {field: 'firewall', title: '防火墙', templet: function(d){
@@ -205,11 +206,14 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
     });
 
     function btn_disabled () {
+        $("#btn_gen").addClass("layui-btn-disabled");
         $("#btn_passwd").addClass("layui-btn-disabled");
         $("#btn_active").addClass("layui-btn-disabled");
         $("#btn_expire").addClass("layui-btn-disabled");
         $("#btn_firewall").addClass("layui-btn-disabled");
         $("#btn_del").addClass("layui-btn-disabled");
+
+        $("#btn_gen").off("click");
         $("#btn_passwd").off("click");
         $("#btn_active").off("click");
         $("#btn_expire").off("click");
@@ -218,12 +222,14 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
     }
 
     function btn_enabled () {
+        $("#btn_gen").removeClass("layui-btn-disabled");
         $("#btn_passwd").removeClass("layui-btn-disabled");
         $("#btn_active").removeClass("layui-btn-disabled");
         $("#btn_expire").removeClass("layui-btn-disabled");
         $("#btn_firewall").removeClass("layui-btn-disabled");
         $("#btn_del").removeClass("layui-btn-disabled");
 
+        $("#btn_gen").on("click", btn_gen_click);
         $("#btn_passwd").on("click", btn_passwd_click);
         $("#btn_active").on("click", btn_active_click);
         $("#btn_expire").on("click", btn_expire_click);
@@ -468,6 +474,31 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
             layer.close(index);
         }
     }
+
+    function btn_gen_click() {
+        var data = {};
+        data.id = selected[0].id;
+        $.ajax({
+            type: "GET",
+            url: "/gen",
+            processData: true,
+            data: data,
+            success: function(resp, textStatus){
+                result = JSON.parse(resp)
+                if (result.status == 0) {
+                    layer.msg('生成成功');
+                    url = result.data.url;
+                    window.location.replace(url);
+                    init();
+                } else {
+                    layer.msg('生成失败');
+                }
+            },
+            error: function(resp, textStatus){
+                layer.msg('生成失败');
+            },
+        })
+    };
 
     function btn_passwd_click() {
         $("#passwd_dialog").removeClass("layui-hide");

@@ -5,6 +5,7 @@ import sys
 from hashlib import md5
 import time
 import base64
+import subprocess
 
 from model.default import User, Admin, Logs
 
@@ -84,7 +85,7 @@ class UserHandler(BaseHandler):
                 userinfo = {}
                 userinfo['id'] = item.id
                 userinfo['username'] = item.username
-                userinfo['password'] = item.password
+                #userinfo['password'] = item.password
                 if item.active == 1:
                     userinfo['active'] = True
                 else:
@@ -104,7 +105,7 @@ class UserHandler(BaseHandler):
                 userinfo = {}
                 userinfo['id'] = item.id
                 userinfo['username'] = item.username
-                userinfo['password'] = item.password
+                #userinfo['password'] = item.password
                 if item.active == 1:
                     userinfo['active'] = True
                 else:
@@ -127,6 +128,26 @@ class AddHandler(BaseHandler):
             self.write(json.dumps({"result": "success"}))
         else:
             err_msg = {"result": "%s 已经存在" % query.username}
+            self.send_error(status_code=500, **err_msg)
+
+
+class GenHandler(BaseHandler):
+    @CheckLogin
+    def get(self):
+        uid = int(self.get_query_arguments("id")[0])
+        query = User.select(User.username).where(User.id == uid).first()
+        if query:
+            result = {"status": 0, "message": "", "total": 0, "data": {}}
+            username = query.username
+            rsa3dir = os.path.join(self.settings["static_path"], "easyrsa3")
+            cmd = os.path.join(rsa3dir, "genconf.sh {0}".format(username))
+            subprocess.call(cmd, shell=True)
+            url = "/static/easyrsa3/{0}.ovpn".format(username)
+            result["message"] = "success"
+            result["data"]["url"] = url
+            self.write(json.dumps(result))
+        else:
+            err_msg = {"result": "%s 不存在" % query.username}
             self.send_error(status_code=500, **err_msg)
 
 
