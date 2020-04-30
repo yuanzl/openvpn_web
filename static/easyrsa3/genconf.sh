@@ -8,7 +8,7 @@ cd $pwd
 vpnconf1="client
 dev tun
 proto tcp-client
-remote 192.168.11.129 1194
+remote myvpn.org 1194
 
 allow-recursive-routing
 
