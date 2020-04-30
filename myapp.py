@@ -5,7 +5,7 @@ import tornado.httpserver
 from tornado.options import define, options
 
 from handler.default import AdminHandler, LoginHandler
-from handler.default import MainHandler, UserHandler
+from handler.default import MainHandler, UserHandler, GenHandler
 from handler.default import AddHandler, UpdateHandler, DelHandler
 from handler.default import LogsHandler
 
@@ -26,6 +26,7 @@ if __name__ == "__main__":
         (r"/", MainHandler),
         (r"/admin", AdminHandler),
         (r"/user", UserHandler),
+        (r"/gen", GenHandler),
         (r"/add", AddHandler),
         (r"/op", UpdateHandler),
         (r"/del", DelHandler),
