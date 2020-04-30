@@ -5,7 +5,7 @@ capass="123456"
 pwd=$(dirname $0)
 cd $pwd
 
-vpnconf1="client
+vpnconf="client
 dev tun
 proto tcp-client
 remote myvpn.org 1194
@@ -16,10 +16,6 @@ resolv-retry infinite
 nobind
 persist-key
 persist-tun
-"
-
-vpnconf2="
-tls-auth ta.key 1
 
 remote-cert-tls server
 auth-user-pass
@@ -53,12 +49,15 @@ EOF
 CA=$(cat pki/ca.crt)
 CERT=$(cat pki/issued/${username}.crt | sed -n '/^-----BEGIN/,/^-----END/p')
 KEY=$(cat pki/private/${username}.key)
+TA=$(cat /etc/openvpn/server/ta.key)
 
-echo -e "${vpnconf1}\n<ca>\n"${CA}"\n</ca>\n<cert>\n"${CERT}"\n</cert>\n<key>\n"${KEY}"\n</key>${vpnconf2}" > $username.ovpn
+echo -e "${vpnconf}\n<ca>\n"${CA}"\n</ca>\n<cert>\n"${CERT}"\n</cert>\n<key>\n"${KEY}"\n</key>\n<tls-crypt>\n"${TA}"\n</tls-crypt>" > $username.ovpn
 sed -i 's/-----BEGIN CERTIFICATE-----/-----BEGIN CERTIFICATE-----\n/g' $username.ovpn
 sed -i 's/-----END CERTIFICATE-----/\n-----END CERTIFICATE-----/g' $username.ovpn
 sed -i 's/-----BEGIN PRIVATE KEY-----/-----BEGIN PRIVATE KEY-----\n/g' $username.ovpn
 sed -i 's/-----END PRIVATE KEY-----/\n-----END PRIVATE KEY-----/g' $username.ovpn
+sed -i 's/-----BEGIN OpenVPN Static key V1-----/\n-----BEGIN OpenVPN Static key V1-----\n/g' $username.ovpn
+sed -i 's/-----END OpenVPN Static key V1-----/\n-----END OpenVPN Static key V1-----/g' $username.ovpn
 
 rm -f pki/issued/${username}.crt
 rm -f pki/private/${username}.key
