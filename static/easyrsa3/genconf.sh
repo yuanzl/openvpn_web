@@ -51,10 +51,14 @@ EOF
 [ ! -f "pki/issued/${username}.crt" ] &&  exit -1
 
 CA=$(cat pki/ca.crt)
-CERT=$(cat pki/issued/${username}.crt)
+CERT=$(cat pki/issued/${username}.crt | sed -n '/^-----BEGIN/,/^-----END/p')
 KEY=$(cat pki/private/${username}.key)
 
 echo -e "${vpnconf1}\n<ca>\n"${CA}"\n</ca>\n<cert>\n"${CERT}"\n</cert>\n<key>\n"${KEY}"\n</key>${vpnconf2}" > $username.ovpn
+sed -i 's/-----BEGIN CERTIFICATE-----/-----BEGIN CERTIFICATE-----\n/g' $username.ovpn
+sed -i 's/-----END CERTIFICATE-----/\n-----END CERTIFICATE-----/g' $username.ovpn
+sed -i 's/-----BEGIN PRIVATE KEY-----/-----BEGIN PRIVATE KEY-----\n/g' $username.ovpn
+sed -i 's/-----END PRIVATE KEY-----/\n-----END PRIVATE KEY-----/g' $username.ovpn
 
 rm -f pki/issued/${username}.crt
 rm -f pki/private/${username}.key
