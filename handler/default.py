@@ -151,7 +151,7 @@ class GenHandler(BaseHandler):
             else:
                 result['status'] = status
                 result['message'] = "生成配置失败"
-                self.write(json.dumps(result)
+                self.write(json.dumps(result))
         else:
             err_msg = {"result": "%s 不存在" % query.username}
             self.send_error(status_code=500, **err_msg)
