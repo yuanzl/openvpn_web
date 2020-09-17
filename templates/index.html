@@ -147,7 +147,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
         {field: 'username', title: '用户', width: 150},
         //{field: 'password', title: '密码'},
         {field: 'active', title: '状态', templet: function(d){return d.active == true ? "激活":"禁用"}, width: 60},
-        {field: 'expire', title: '过期日期', width: 110},
+        {field: 'expire', title: '过期日期', width: 180},
         {field: 'firewall', title: '防火墙', templet: function(d){
                 if (d.firewall === null || d.firewall === "undefined" || d.firewall === "")
                     return "";
@@ -195,13 +195,15 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
 
     laydate.render({
         elem: '#expire_date', //指定元素
-        format: 'yyyy-MM-dd',
+        format: 'yyyy-MM-dd HH:mm:ss',
+        type: 'datetime',
         value: now
     });
 
     laydate.render({
         elem: '#expire_dg', //指定元素
-        format: 'yyyy-MM-dd',
+        format: 'yyyy-MM-dd HH:mm:ss',
+        type: 'datetime',
         value: now
     });
 
