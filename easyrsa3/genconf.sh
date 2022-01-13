@@ -2,8 +2,8 @@
 
 username=$1
 capass="123456"
-pwd=$(dirname $0)
-cd $pwd
+curdir=$(cd $(dirname $0); pwd)
+cd $curdir
 
 vpnconf="client
 dev tun

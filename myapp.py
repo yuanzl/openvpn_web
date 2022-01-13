@@ -12,6 +12,7 @@ from handler.default import LogsHandler
 
 define("port", default=8000, help="port to listen on")
 curpath = os.path.dirname(os.path.realpath(__file__))
+define("rsa3dir", default=os.path.join(curpath, "easyrsa3"))
 
 if __name__ == "__main__":
     setting = {

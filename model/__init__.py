@@ -1,7 +1,6 @@
 from peewee import SqliteDatabase, Model
 
-db = SqliteDatabase("/etc/openvpn/openvpn.db")
-db.connect()
+db = SqliteDatabase(None)
 
 
 class BaseModel(Model):

@@ -6,6 +6,7 @@ from hashlib import md5
 import time
 import base64
 import subprocess
+from tornado.options import options
 
 from model.default import User, Admin, Logs
 
@@ -139,11 +140,13 @@ class GenHandler(BaseHandler):
         if query:
             result = {"status": 0, "message": "", "total": 0, "data": {}}
             username = query.username
-            rsa3dir = os.path.join(self.settings["static_path"], "easyrsa3")
-            cmd = os.path.join(rsa3dir, "genconf.sh {0}".format(username))
+            cmd = os.path.join(options.rsa3dir, "genconf.sh {0}".format(username))
             status = subprocess.call(cmd, shell=True)
             if status == 0:
-                url = "/static/easyrsa3/{0}.ovpn".format(username)
+                src = os.path.join(options.rsa3dir, "{0}.ovpn".format(username))
+                dest = os.path.join(self.settings["static_path"], "client/{0}.ovpn".format(username))
+                os.replace(src, dest)
+                url = "/static/client/{0}.ovpn".format(username)
                 result["status"] = 0
                 result["message"] = "success"
                 result["data"]["url"] = url
