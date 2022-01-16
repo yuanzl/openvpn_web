@@ -207,7 +207,7 @@ class LogsHandler(BaseHandler):
         if user == "all":
             total = Logs.select().count()
             result['total'] = total
-            query = Logs.select().order_by(Logs.id).limit(pagenum).offset((page - 1)*pagenum)
+            query = Logs.select().order_by(Logs.id.desc()).limit(pagenum).offset((page - 1)*pagenum)
             for item in query:
                 loginfo = {}
                 loginfo['id'] = item.id
@@ -227,7 +227,7 @@ class LogsHandler(BaseHandler):
         else:
             total = Logs.select().where(Logs.username == user).count()
             result['total'] = total
-            query = Logs.select().where(Logs.username == user).order_by(Logs.id).limit(pagenum).offset((page - 1)*pagenum)
+            query = Logs.select().where(Logs.username == user).order_by(Logs.id.desc()).limit(pagenum).offset((page - 1)*pagenum)
             for item in query:
                 loginfo = {}
                 loginfo['id'] = item.id
