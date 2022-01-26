@@ -525,17 +525,6 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
         var data = {};
         data.id = selected[0].id;
         data.active = !selected[0].active;
-        if (data.active) {
-            if (now.getMonth() < 9)
-                month = "-0" + (now.getMonth() + 1);
-            else
-                month = "-" + (now.getMonth() + 1);
-            if (now.getDate() < 10)
-                day = "-0" + now.getDate();
-            else
-                day = "-" + now.getDate();
-            data.expire = now.getFullYear() + month + day;
-        }
         $.ajax({
             type: "POST",
             url: "/op",
