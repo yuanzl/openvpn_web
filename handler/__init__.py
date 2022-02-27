@@ -1,8 +1,5 @@
 from tornado.web import RequestHandler
 
-import os
-import sys
-import base64
 import logging
 from tornado.log import LogFormatter
 
@@ -29,21 +26,21 @@ class BaseHandler(RequestHandler):
         self.logger.addHandler(console_handler)
         self.logger.addHandler(file_handler)
         '''
-        db.init("/etc/openvpn/openvpn.db")
-        if db.is_closed():
-            db.connect()
+        super(BaseHandler, self).initialize()
 
     def prepare(self):
-        if self.request.method == "POST":
-            if sys.version_info.major == 2:
-                self.request.body = base64.decodestring(self.request.body)
-            if sys.version_info.major == 3:
-                self.request.body = base64.decodebytes(self.request.body).decode()
+        if db.is_closed():
+            db.connect()
+        super(BaseHandler, self).prepare()
 
     def on_finish(self):
         if not db.is_closed():
             db.close()
+        super(BaseHandler, self).on_finish()
 
     def write_error(self, status_code, **kwargs):
-        self.finish("%(message)s" % {"message": kwargs['result']})
+        if "result" in kwargs.keys():
+            self.finish("%(message)s" % {"message": kwargs['result']})
+        else:
+            self.finish("%(message)s" % {"message": "internal error"})
 

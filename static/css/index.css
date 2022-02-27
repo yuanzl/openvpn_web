@@ -7,8 +7,12 @@ body {
     margin-top: 120px;
 }
 
+.login-submit {
+    margin-left: 15px;
+}
+
 .login-submit button {
-    margin-left: 30%;
+    width: 45%;
 }
 
 .content-header {
@@ -69,4 +73,28 @@ body {
 .layui-logs .layui-table-cell {
     padding: 0 2px;
 }
+
+.layui-form-label {
+    width: 100px;
+}
+
+.layui-input-block {
+    margin-left: 130px;
+}
+
+.var-explain {
+    height: 44px;
+}
+
+.var-explain .msg-var {
+    text-align: right;
+    padding: 5px;
+}
+
+.var-explain .msg-var-desc {
+    margin-left: 5px;
+    padding: 5px;
+}
+
+
 

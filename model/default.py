@@ -15,10 +15,12 @@ class Admin(BaseModel):
 class User(BaseModel):
     id = IntegerField(primary_key=True)
     username = CharField(max_length=50)
+    email = CharField(max_length=100)
     password = CharField(max_length=64)
     active = IntegerField()
     expire = CharField()
     firewall = CharField()
+    send = IntegerField()
 
     class Meta:
         table_name = 't_user'
@@ -38,3 +40,29 @@ class Logs(BaseModel):
 
     class Meta:
         table_name = 't_logs'
+
+
+class Smtp(BaseModel):
+    id = IntegerField()
+    server = CharField()
+    ssl = IntegerField()
+    port = IntegerField()
+    user = CharField()
+    password = CharField()
+
+    class Meta:
+        table_name = 't_smtp'
+
+
+class Warn(BaseModel):
+    id = IntegerField()
+    status = IntegerField()
+    send_time = IntegerField()
+    send_msg = CharField()
+    admin_status = IntegerField()
+    admin_email = CharField()
+    admin_msg = CharField()
+
+    class Meta:
+        table_name = 't_warn'
+
