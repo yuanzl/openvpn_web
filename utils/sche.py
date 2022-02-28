@@ -19,9 +19,9 @@ def check_expire():
                 admin_status = query.admin_status
                 admin_email = query.admin_email
                 now = time.time()
-                now_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(now + (times - 1) * 86400))
-                gap_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(now + times * 86400))       
-                q_user = User.select(User.id, User.username, User.email, User.expire, User.send).where(User.expire > now_time and User.expire < gap_time)
+                last_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(now + (times - 1) * 86400))
+                next_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(now + times * 86400))       
+                q_user = User.select(User.id, User.username, User.email, User.expire, User.send).where(User.expire > last_time and User.expire < next_time)
                 all_user = ""
                 if q_user:
                     for item in q_user:
