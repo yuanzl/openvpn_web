@@ -47,6 +47,6 @@ def send_mail(email, title="", message=""):
             smtp.sendmail(smtp_user, email, msg.as_string())
             smtp.quit()
         except Exception as e:
-            raise ValueError("电子邮件发送失败：{0}，请检查相关设置。".format(str(e)))
+            raise ValueError("电子邮件发送失败: {0}，请检查相关设置。".format(str(e)))
     else:
         raise ValueError("SMTP服务没有配置")

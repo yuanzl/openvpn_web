@@ -100,22 +100,17 @@ layui.define(['jquery', 'message'],
         function collaspe() {
             var left = $(".layui-side");
             var right = $(".layui-body");
-            var footer = $(".layui-footer");
             if ( collasped === true ) {                    
                 left.removeClass("nav-collaspe");
                 right.removeClass("nav-collaspe");
-                footer.removeClass("nav-collaspe");
                 left.addClass("nav-collaspe-show");
                 right.addClass("nav-collaspe-show");
-                footer.addClass("nav-collaspe-show");
                 collasped = false;
             } else {
                 left.removeClass("nav-collaspe-show");
                 right.removeClass("nav-collaspe-show");
-                footer.removeClass("nav-collaspe-show");
                 left.addClass("nav-collaspe");
                 right.addClass("nav-collaspe");
-                footer.addClass("nav-collaspe");
                 collasped = true;
             }
         };
@@ -124,11 +119,11 @@ layui.define(['jquery', 'message'],
             Admin.renderPage();
         };
 
-        $(".btn-collaspe").click(function() {
+        $("#btnCollaspe").click(function() {
             collaspe();
         })
 
-        $(".btn-refresh").click(function() {
+        $("#btnRefresh").click(function() {
             refresh();
         })
 

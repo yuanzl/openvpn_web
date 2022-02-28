@@ -41,5 +41,5 @@ def check_expire():
 
 def sche_init():
     scheduler = TornadoScheduler()
-    scheduler.add_job(check_expire, 'cron', day="*", hour="22", minute="06", id="check_expire")
+    scheduler.add_job(check_expire, 'cron', day="*", hour="01", minute="00", id="check_expire")
     scheduler.start()
