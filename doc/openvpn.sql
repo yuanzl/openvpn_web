@@ -95,7 +95,7 @@ CREATE TABLE "t_user" (
 "active"  INTEGER NOT NULL,
 "expire"  TEXT NOT NULL,
 "firewall"  TEXT,
-"send"  INTEGER
+"send"  INTEGER NOT NULL DEFAULT 0
 );
 
 -- ----------------------------
