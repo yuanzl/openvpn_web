@@ -33,7 +33,7 @@ def check_expire():
                             all_user = all_user + item.username + ", "
 
                 if admin_status == 1 and all_user != "":
-                    msg = "管理员: \r\n\t    VPN用户: {0} 即将到期。".format(all_user, item.expire)
+                    msg = "管理员: \r\n\t    VPN用户: {0} 即将到期。".format(all_user)
                     send_mail(admin_email, title="VPN用户即将到期", message=msg)
         db.close()
     except Exception as e:
