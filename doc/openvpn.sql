@@ -1,10 +1,4 @@
 /*
-Navicat SQLite Data Transfer
-
-Source Server         : openvpn
-Source Server Version : 30706
-Source Host           : :0
-
 Target Server Type    : SQLite
 Target Server Version : 30706
 File Encoding         : 65001
@@ -13,19 +7,6 @@ Date: 2022-02-27 23:09:32
 */
 
 PRAGMA foreign_keys = OFF;
-
--- ----------------------------
--- Table structure for "main"."sqlite_sequence"
--- ----------------------------
-DROP TABLE "main"."sqlite_sequence";
-CREATE TABLE sqlite_sequence(name,seq);
-
--- ----------------------------
--- Records of sqlite_sequence
--- ----------------------------
-INSERT INTO "main"."sqlite_sequence" VALUES ('t_admin', 1);
-INSERT INTO "main"."sqlite_sequence" VALUES ('t_logs', 1);
-INSERT INTO "main"."sqlite_sequence" VALUES ('t_user', 1);
 
 -- ----------------------------
 -- Table structure for "main"."t_admin"
