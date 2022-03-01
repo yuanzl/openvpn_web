@@ -276,11 +276,15 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
         var add_form = layero.find(".add_form")[0];
         var username = add_form['username'].value;
         var password = add_form['password'].value;
+		var email = add_form['email'].value;
         if (username === "") {
             layer.msg("请输入用户");
             return;
         } else if ( /^[a-zA-Z]{1}([a-zA-Z0-9]|[._!@#$<>%^&()?]){5,}$/.test(password) == false ) {
             layer.msg('密码必须是字母开头，不少于6位数的字母数字组合');
+            return;
+        } else if ( /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(email) == false ) {
+            layer.msg("邮箱地址不正确");
             return;
         } else {
             layer.close(index);
@@ -291,7 +295,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
                 layer.msg("加密错误");
                 return;
             }
-            data.email = add_form['email'].value;
+            data.email = email;
             data.active = true;
             data.expire = add_form['expire'].value;
             data.firewall = add_form['firewall'].value;
