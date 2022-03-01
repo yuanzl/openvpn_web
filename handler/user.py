@@ -145,6 +145,9 @@ class UpdateHandler(BaseHandler):
                                 raise ValueError("用户邮箱没有设置.")
                     else:
                         raise ValueError("用户密码错误!")
+                if key == 'email':
+                    user = User.update({User.email: value}).where(User.id == req['id'])
+                    user.execute()
                 if key == 'active':
                     user = User.update({User.active: value}).where(User.id == req['id'])
                     user.execute()

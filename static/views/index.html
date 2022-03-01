@@ -24,7 +24,8 @@
                     <i class="layui-icon layui-icon-more-vertical" style="color: #ddd; margin: 10px 10px 0 0"></i>
                     <button id="btn_add" class="layui-btn layui-btn-normal layui-btn-sm">添加</button>                    
                     <button id="btn_gen" class="layui-btn layui-btn-disabled layui-btn-sm">生成配置</button>
-                    <button id="btn_passwd" class="layui-btn layui-btn-disabled layui-btn-sm">修改密码</button>                   
+                    <button id="btn_passwd" class="layui-btn layui-btn-disabled layui-btn-sm">修改密码</button>
+					<button id="btn_email" class="layui-btn layui-btn-disabled layui-btn-sm">修改邮箱</button>
                     <button id="btn_expire" class="layui-btn layui-btn-disabled layui-btn-sm">延期</button>
                     <button id="btn_firewall" class="layui-btn layui-btn-disabled layui-btn-sm">防火墙策略</button>
                     <button id="btn_active" class="layui-btn layui-btn-disabled layui-btn-warm layui-btn-sm">激活</button>
@@ -100,6 +101,17 @@
     </form>
 </div>
 
+<div id="email_dialog" class="layui-hide layui-inline">
+    <form class="layui-form email_form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱地址</label>
+            <div class="layui-input-block">
+                <input id="email_input" type="text" name="email" placeholder="请输入" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+
 <div id="expire_dialog" class="layui-hide layui-inline">
     <form class="layui-form expire_form">
         <div class="layui-form-item">
@@ -168,6 +180,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
     function btn_disabled () {
         $("#btn_gen").addClass("layui-btn-disabled");
         $("#btn_passwd").addClass("layui-btn-disabled");
+		$("#btn_email").addClass("layui-btn-disabled");
         $("#btn_active").addClass("layui-btn-disabled");
         $("#btn_expire").addClass("layui-btn-disabled");
         $("#btn_firewall").addClass("layui-btn-disabled");
@@ -175,6 +188,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
 
         $("#btn_gen").off("click");
         $("#btn_passwd").off("click");
+		$("#btn_email").off("click");
         $("#btn_active").off("click");
         $("#btn_expire").off("click");
         $("#btn_firewall").off("click");
@@ -184,6 +198,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
     function btn_enabled () {
         $("#btn_gen").removeClass("layui-btn-disabled");
         $("#btn_passwd").removeClass("layui-btn-disabled");
+		$("#btn_email").removeClass("layui-btn-disabled");
         $("#btn_active").removeClass("layui-btn-disabled");
         $("#btn_expire").removeClass("layui-btn-disabled");
         $("#btn_firewall").removeClass("layui-btn-disabled");
@@ -191,6 +206,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
 
         $("#btn_gen").on("click", btn_gen_click);
         $("#btn_passwd").on("click", btn_passwd_click);
+		$("#btn_email").on("click", btn_email_click);
         $("#btn_active").on("click", btn_active_click);
         $("#btn_expire").on("click", btn_expire_click);
         $("#btn_firewall").on("click", btn_firewall_click);
@@ -407,17 +423,24 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
             }
         });
     };
-
-    function btn_active_click() {
+	
+	function modify_email(index, layero) {
+        var email_form = layero.find(".email_form")[0];
+        var email = email_form['email'].value;
+        if ( /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(email) == false ) {
+            layer.msg("邮箱地址不正确");
+            return;
+        }
+		layer.close(index);
         var data = {};
         data.id = selected[0].id;
-        data.active = !selected[0].active;
+        data.email = email;
         $.ajax({
             type: "POST",
             url: "/op",
             contentType: "application/json",
-            processData: false,
             dataType: "json",
+            processData: false,
             data: JSON.stringify(data),
             success: function(resp, textStatus){
                 init();
@@ -426,8 +449,28 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
             error: function(resp, textStatus){
                 layer.msg('修改失败');
             },
-        })
-    };
+        })		
+    }
+
+    function btn_email_click() {
+        var dialog = $("#email_dialog").html();
+        layer.open({
+            type: 1,
+            title: "修改邮箱",
+            area: '500px',
+            content: dialog,
+            closeBtn: false,
+            btn: ['确定', '取消'],
+            yes: modify_email,
+            btn2: function (index, layero) {
+                layer.close(index);
+            },
+            success: function(layero, index) {
+                var elem = layero.find("#email_input")[0];
+                $(elem).val(selected[0].email);
+            }
+        });
+    };    
 
     function modify_expire(index, layero) {
         layer.close(index);
@@ -477,7 +520,8 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
         });
     };
 
-    function modify_firewall(index, layero) {        
+    function modify_firewall(index, layero) { 
+        layer.close(index);	
         var firewall_form = layero.find(".firewall-form")[0];
         var data = {};        
         data.id = selected[0].id;
@@ -496,8 +540,7 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
             error: function(resp, textStatus){
                 layer.msg('修改失败');
             },
-        })
-        layer.close(index);
+        })        
     }
 
     function btn_firewall_click() {
@@ -520,6 +563,27 @@ layui.use(['jquery', 'element', 'table', 'layer', 'form', 'laydate'], function()
                 }                
             }
         });
+    };
+	
+	function btn_active_click() {
+        var data = {};
+        data.id = selected[0].id;
+        data.active = !selected[0].active;
+        $.ajax({
+            type: "POST",
+            url: "/op",
+            contentType: "application/json",
+            processData: false,
+            dataType: "json",
+            data: JSON.stringify(data),
+            success: function(resp, textStatus){
+                init();
+                layer.msg('修改成功');
+            },
+            error: function(resp, textStatus){
+                layer.msg('修改失败');
+            },
+        })
     };
 
     function btn_del_click() {
