@@ -25,14 +25,14 @@ def check_expire():
                 all_user = ""
                 if q_user:
                     for item in q_user:
-                        if item.send == 0:
+                        if item.send == 0 and item.email != "":
                             msg = message.format(username=item.username, time=item.expire)
                             send_mail(item.email, title="VPN用户即将到期", message=msg)
                             q_user = User.update({User.send: 1}).where(User.id == item.id)
                             q_user.execute()
                             all_user = all_user + item.username + ", "
 
-                if admin_status == 1 and all_user != "":
+                if admin_status == 1 and admin_email != "" and all_user != "":
                     msg = "管理员: \r\n\t    VPN用户: {0} 即将到期。".format(all_user)
                     send_mail(admin_email, title="VPN用户即将到期", message=msg)
         db.close()

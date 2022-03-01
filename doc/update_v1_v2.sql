@@ -6,7 +6,6 @@ File Encoding         : 65001
 Date: 2022-02-28 20:09:32
 */
 
-
 alter table t_user add COLUMN email TEXT NULL;
 alter table t_user add COLUMN send INTEGER NOT NULL DEFAULT 0;
 

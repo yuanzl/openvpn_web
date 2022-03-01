@@ -11,7 +11,6 @@ PRAGMA foreign_keys = OFF;
 -- ----------------------------
 -- Table structure for "main"."t_admin"
 -- ----------------------------
-DROP TABLE "main"."t_admin";
 CREATE TABLE "t_admin" (
 "id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "username"  TEXT NOT NULL,
@@ -27,7 +26,6 @@ INSERT INTO "main"."t_admin" VALUES (1, 'admin', 'e10adc3949ba59abbe56e057f20f88
 -- ----------------------------
 -- Table structure for "main"."t_logs"
 -- ----------------------------
-DROP TABLE "main"."t_logs";
 CREATE TABLE "t_logs" (
 "id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "username"  TEXT NOT NULL,
@@ -49,7 +47,6 @@ CREATE TABLE "t_logs" (
 -- ----------------------------
 -- Table structure for "main"."t_smtp"
 -- ----------------------------
-DROP TABLE "main"."t_smtp";
 CREATE TABLE "t_smtp" (
 "id"  INTEGER NOT NULL,
 "server"  TEXT,
@@ -67,7 +64,6 @@ INSERT INTO "main"."t_smtp" VALUES (1, '', 0, 25, '', '');
 -- ----------------------------
 -- Table structure for "main"."t_user"
 -- ----------------------------
-DROP TABLE "main"."t_user";
 CREATE TABLE "t_user" (
 "id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "username"  TEXT NOT NULL,
@@ -82,7 +78,6 @@ CREATE TABLE "t_user" (
 -- ----------------------------
 -- Table structure for "main"."t_warn"
 -- ----------------------------
-DROP TABLE "main"."t_warn";
 CREATE TABLE "t_warn" (
 "id"  INTEGER NOT NULL,
 "status"  INTEGER NOT NULL,

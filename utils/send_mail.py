@@ -22,9 +22,9 @@ def send_mail(email, title="", message=""):
 
         privKey = RSA.import_key(private_key)
         cipher = PKCS1_v1_5.new(privKey)
-        decrypt = cipher.decrypt(base64.b64decode(query.password.encode()), None)
-        if decrypt:
-            smtp_passwd = decrypt.decode()
+        decrypted = cipher.decrypt(base64.b64decode(query.password.encode()), None)
+        if decrypted:
+            smtp_passwd = decrypted.decode()
         else:
             raise ValueError("SMTP发送用户密码不正确!")
 

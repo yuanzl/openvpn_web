@@ -6,6 +6,7 @@ import subprocess
 
 from config import private_key, public_key
 
+from Crypto.Hash import MD5
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
 
@@ -78,6 +79,7 @@ class AddHandler(BaseHandler):
             req = json.loads(self.request.body)
             query = User.select().where(User.username == req['username']).first()
             if query is None:
+                req['password'] = MD5.new(req['password'].encode()).hexdigest()
                 insert = User.insert(req)
                 insert.execute()
                 self.write(json.dumps({"result": "success"}))
@@ -126,18 +128,21 @@ class UpdateHandler(BaseHandler):
                 if key == 'password':
                     privKey = RSA.import_key(private_key)
                     cipher = PKCS1_v1_5.new(privKey)
-                    password = cipher.decrypt(base64.b64decode(value.encode()), None)
-                    if password:
-                        user = User.update({User.password: value}).where(User.id == req['id'])
+                    decrypted = cipher.decrypt(base64.b64decode(value.encode()), None)
+                    if decrypted:
+                        md5 = MD5.new(decrypted).hexdigest()
+                        user = User.update({User.password: md5}).where(User.id == req['id'])
                         user.execute()
                         if req.get('sendmail') == True:
                             query_mail = User.select(User.username, User.email).where(User.id == req['id']).first()
-                            if query_mail:
+                            if query_mail and query_mail.email != "":
                                 username = query_mail.username
                                 email = query_mail.email                                
                                 title = "VPN用户密码更改"
-                                msg = "{0}:\r\n\t        你的VPN用户密码已修改为: {1}.".format(username, password.decode())
+                                msg = "{0}:\r\n\t        你的VPN用户密码已修改为: {1}.".format(username, decrypted.decode())
                                 send_mail.send_mail(email, title=title, message=msg)
+                            else:
+                                raise ValueError("用户邮箱没有设置.")
                     else:
                         raise ValueError("用户密码错误!")
                 if key == 'active':
